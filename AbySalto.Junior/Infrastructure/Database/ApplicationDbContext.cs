@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AbySalto.Junior.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace AbySalto.Junior.Infrastructure.Database
 {
@@ -8,7 +9,8 @@ namespace AbySalto.Junior.Infrastructure.Database
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options) { }
 
-        public DbSet<TodoItem> Todos { get; set; }
+        public DbSet<Article> Article { get; set; }
+        public DbSet<Order> Order { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -20,12 +22,6 @@ namespace AbySalto.Junior.Infrastructure.Database
         public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             return await base.SaveChangesAsync(cancellationToken);
-        }
-        public class TodoItem
-        {
-            public int Id { get; set; }
-            public string Title { get; set; } = string.Empty;
-            public bool IsDone { get; set; }
         }
     }
 }
