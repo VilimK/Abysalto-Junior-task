@@ -79,9 +79,26 @@ namespace AbySalto.Junior.Services
 
         internal void UpdateOrderAmount(Order order)
         {
-            if (order == null)
+            if (order == null || order.OrderItems == null )
                 throw new ArgumentNullException("Order is null");
             order.Amount = order.OrderItems.Sum(o => o.Article.Price * o.Quantity);
         }
+
+        //Status Codes:
+        //PND-pending, PRP-preparing,CMP-completed
+        public async Task<List<Order>> GetOrdersDependingOnStatusCode(string statusCode)
+        {
+            var orders = await _context.Order
+            .Include(o => o.OrderItems)
+            .ThenInclude(oi => oi.Article)
+            .Include(o => o.PaymentType)
+            .Include(o => o.Status)
+            .Include(o => o.Currency)
+            .Where(o => o.Status.Code == statusCode)
+            .ToListAsync();
+            return orders; 
+        }
+
+
     }
 }

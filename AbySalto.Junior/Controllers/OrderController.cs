@@ -31,5 +31,24 @@ namespace AbySalto.Junior.Controllers
                 return BadRequest(new {error = ex.Message});
             }
         }
+
+        //Only pending and preparing orders
+        [HttpGet("active")]
+        public async Task<ActionResult<IEnumerable<Order>>> GetActiveOrders()
+        {
+            var ordersPND = await _orderService.GetOrdersDependingOnStatusCode("PND");
+            var ordersPRP = await _orderService.GetOrdersDependingOnStatusCode("PRP");
+            var orders = new List<Order>();
+            orders.AddRange(ordersPND);
+            orders.AddRange(ordersPRP);
+            return Ok(orders);
+        }
+
+        [HttpGet("completed")]
+        public async Task<ActionResult<IEnumerable<Order>>> GetCompletedOrders()
+        {
+            var orders = await _orderService.GetOrdersDependingOnStatusCode("CMP");
+            return Ok(orders);
+        }
     }
 }
