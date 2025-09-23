@@ -43,7 +43,7 @@ namespace AbySalto.Junior.Services
                 ContactNumber = createOrderDto.ContactNumber,
                 Remark = createOrderDto.Remark,
                 PaymentTypeId = createOrderDto.PaymentTypeId,
-                StatusId = createOrderDto.StatusId,
+                StatusId = _context.Status.Where(s => s.Code == "PND").Select(s => s.Id).SingleOrDefault(),
                 CurrencyId = createOrderDto.CurrencyId,
                 Amount = 0,
                 OrderItems = new List<OrderItem>()

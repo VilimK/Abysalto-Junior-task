@@ -7,7 +7,6 @@
         public string ContactNumber { get; set; }
         public string? Remark { get; set; }
         public int PaymentTypeId { get; set; }
-        public int StatusId { get; set; }
         public int CurrencyId { get; set; }
     }
 }
