@@ -1,5 +1,6 @@
 
 using AbySalto.Junior.Infrastructure.Database;
+using AbySalto.Junior.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
@@ -26,7 +27,21 @@ namespace AbySalto.Junior
             builder.Services.AddScoped<IApplicationDbContext>(provider =>
                 provider.GetRequiredService<ApplicationDbContext>());
 
+            builder.Services.AddScoped<OrderService>();
+
+            builder.Services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(policy =>
+                {
+                    policy.AllowAnyOrigin()
+                          .AllowAnyHeader()
+                          .AllowAnyMethod();
+                });
+            });
+
             var app = builder.Build();
+
+            app.UseCors();
 
             if (app.Environment.IsDevelopment())
             {
@@ -41,7 +56,6 @@ namespace AbySalto.Junior
 
             app.UseHttpsRedirection();
             app.UseAuthorization();
-
 
             app.MapControllers();
             app.Run();
