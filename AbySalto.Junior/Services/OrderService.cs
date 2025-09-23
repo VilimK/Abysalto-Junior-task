@@ -51,7 +51,7 @@ namespace AbySalto.Junior.Services
             return newOrder; 
         }
 
-        public void AddMultipleItemsToOrder(int orderId, List<int> itemIds)
+        public void AddMultipleItemsToOrder(int orderId, IEnumerable<int> itemIds)
         {
             foreach (var itemId in itemIds)
                 AddSingleItemToOrder(orderId, itemId);       
@@ -77,8 +77,10 @@ namespace AbySalto.Junior.Services
             await _context.SaveChangesAsync();
         }
 
-        private void UpdateOrderAmount(Order order)
+        internal void UpdateOrderAmount(Order order)
         {
+            if (order == null)
+                throw new ArgumentNullException("Order is null");
             order.Amount = order.OrderItems.Sum(o => o.Article.Price * o.Quantity);
         }
     }

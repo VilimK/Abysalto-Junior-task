@@ -28,6 +28,7 @@ namespace AbySalto.Junior
                 provider.GetRequiredService<ApplicationDbContext>());
 
             builder.Services.AddScoped<OrderService>();
+            builder.Services.AddScoped<OrderItemService>();
 
             builder.Services.AddCors(options =>
             {
