@@ -78,5 +78,13 @@ namespace AbySalto.Junior.Controllers
                 return BadRequest(new { error = ex.Message });
             }
         }
+       
+        [HttpGet("sorted-by-amount")]
+        public async Task<ActionResult<IEnumerable<Order>>> GetOrdersSortedByAmount()
+        {
+            var orders = await _orderService.GetOrdersSortedByAmountAsync();
+            return Ok(orders);
+        }
+
     }
 }

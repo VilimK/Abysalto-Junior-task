@@ -101,9 +101,7 @@ namespace AbySalto.Junior.Services
 
         public async Task<Order> UpdateOrderStatusAsync(int orderId)
         {
-            var order = await _context.Order.FirstOrDefaultAsync(o => o.Id == orderId);
-            if (order == null)
-                throw new ArgumentException("Invalid order ID");
+            Order? order = await GetOrderById(orderId);
 
             var status = await _context.Status.FirstOrDefaultAsync(s => s.Id == order.StatusId);
             if (status == null)
@@ -128,10 +126,30 @@ namespace AbySalto.Junior.Services
 
         public async Task<decimal> GetOrderAmount(int orderId)
         {
+            Order? order = await GetOrderById(orderId);
+            return order.Amount;
+        }
+
+        private async Task<Order?> GetOrderById(int orderId)
+        {
             var order = await _context.Order.FirstOrDefaultAsync(o => o.Id == orderId);
             if (order == null)
                 throw new ArgumentException("Invalid order ID");
-            return order.Amount;
+            return order;
         }
+
+        public async Task<List<Order>> GetOrdersSortedByAmountAsync()
+        {
+            var orders = await _context.Order
+                .Include(o => o.OrderItems)
+                .ThenInclude(oi => oi.Article)
+                .Include(o => o.PaymentType)
+                .Include(o => o.Status)
+                .Include(o => o.Currency)
+                .ToListAsync();
+
+            return orders.OrderByDescending(o => o.Amount).ToList();
+        }
+
     }
 }
