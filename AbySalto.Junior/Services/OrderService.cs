@@ -125,5 +125,13 @@ namespace AbySalto.Junior.Services
 
             return order;
         }
+
+        public async Task<decimal> GetOrderAmount(int orderId)
+        {
+            var order = await _context.Order.FirstOrDefaultAsync(o => o.Id == orderId);
+            if (order == null)
+                throw new ArgumentException("Invalid order ID");
+            return order.Amount;
+        }
     }
 }

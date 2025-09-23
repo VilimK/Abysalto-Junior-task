@@ -65,5 +65,18 @@ namespace AbySalto.Junior.Controllers
             }
         }
 
+        [HttpGet("{orderId}/amount")]
+        public ActionResult<decimal> GetOrderAmount(int orderId)
+        {
+            try
+            {
+                var amount = _orderService.GetOrderAmount(orderId);
+                return Ok(amount);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+        }
     }
 }
