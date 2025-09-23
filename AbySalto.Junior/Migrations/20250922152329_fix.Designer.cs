@@ -3,6 +3,7 @@ using System;
 using AbySalto.Junior.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AbySalto.Junior.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250922152329_fix")]
+    partial class fix
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.9");
@@ -32,7 +35,7 @@ namespace AbySalto.Junior.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<decimal>("Price")
-                        .HasColumnType("decimal(10,2)");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -209,7 +212,7 @@ namespace AbySalto.Junior.Migrations
                         .IsRequired();
 
                     b.HasOne("AbySalto.Junior.Models.Order", "Order")
-                        .WithMany("OrderItems")
+                        .WithMany("OrderItem")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -221,7 +224,7 @@ namespace AbySalto.Junior.Migrations
 
             modelBuilder.Entity("AbySalto.Junior.Models.Order", b =>
                 {
-                    b.Navigation("OrderItems");
+                    b.Navigation("OrderItem");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,5 +1,7 @@
 ﻿using AbySalto.Junior.Infrastructure.Database;
 using AbySalto.Junior.Models;
+using AbySalto.Junior.Models.DTOs;
+using AbySalto.Junior.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,93 +11,25 @@ namespace AbySalto.Junior.Controllers
     [ApiController]
     public class OrderController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly OrderService _orderService;
 
-        public OrderController(ApplicationDbContext context)
+        public OrderController(OrderService orderService)
         {
-            _context = context;
-        }
-
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Order>>> GetOrders()
-        {
-            return await _context.Order
-                .Include(o => o.PaymentType)
-                .Include(o => o.Status)
-                .Include(o => o.Currency)
-                .Include(o => o.Articles)
-                .ToListAsync();
-        }
-
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Order>> GetOrder(int id)
-        {
-            var order = await _context.Order
-                .Include(o => o.PaymentType)
-                .Include(o => o.Status)
-                .Include(o => o.Currency)
-                .Include(o => o.Articles)
-                .FirstOrDefaultAsync(o => o.Id == id);
-
-            if (order == null)
-            {
-                return NotFound();
-            }
-
-            return order;
+            _orderService = orderService;
         }
 
         [HttpPost]
-        public async Task<ActionResult<Order>> CreateOrder(Order order)
+        public async Task<ActionResult<Order>> CreateOrder(CreateOrderDTO createOrderDto)
         {
-            _context.Order.Add(order);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(GetOrder), new { id = order.Id }, order);
-        }
-
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateOrder(int id, Order order)
-        {
-            if (id != order.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(order).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
+                var result = await _orderService.CreateOrder(createOrderDto);
+                return Ok(result);
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception ex)
             {
-                if (!_context.Order.Any(o => o.Id == id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return BadRequest(new {error = ex.Message});
             }
-
-            return NoContent();
-        }
-
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteOrder(int id)
-        {
-            var order = await _context.Order.FindAsync(id);
-            if (order == null)
-            {
-                return NotFound();
-            }
-
-            _context.Order.Remove(order);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
         }
     }
 }

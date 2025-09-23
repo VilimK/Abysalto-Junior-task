@@ -11,6 +11,10 @@ namespace AbySalto.Junior.Infrastructure.Database
 
         public DbSet<Article> Article { get; set; }
         public DbSet<Order> Order { get; set; }
+        public DbSet<Status> Status { get; set; }
+        public DbSet<PaymentType> PaymentType { get; set; }
+        public DbSet<Currency> Currency { get; set; }
+        public DbSet<OrderItem> OrderItem { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

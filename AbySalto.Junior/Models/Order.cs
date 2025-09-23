@@ -36,7 +36,9 @@ namespace AbySalto.Junior.Models
         public Status Status { get; set; }
         [Required]
         public int CurrencyId { get; set; }
+
         public Currency Currency { get; set; }
-        public List<Article> Articles { get; set; }
+
+        public List<OrderItem> OrderItems { get; set; }
     }
 }

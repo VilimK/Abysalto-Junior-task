@@ -3,6 +3,7 @@ using System;
 using AbySalto.Junior.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AbySalto.Junior.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250922151847_minorCorrections")]
+    partial class minorCorrections
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.9");
@@ -31,10 +34,15 @@ namespace AbySalto.Junior.Migrations
                         .HasMaxLength(150)
                         .HasColumnType("TEXT");
 
+                    b.Property<int?>("OrderItemId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<decimal>("Price")
-                        .HasColumnType("decimal(10,2)");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("OrderItemId");
 
                     b.ToTable("Article");
                 });
@@ -126,8 +134,6 @@ namespace AbySalto.Junior.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ArticleId");
-
                     b.HasIndex("OrderId");
 
                     b.ToTable("OrderItem");
@@ -173,6 +179,13 @@ namespace AbySalto.Junior.Migrations
                     b.ToTable("Status");
                 });
 
+            modelBuilder.Entity("AbySalto.Junior.Models.Article", b =>
+                {
+                    b.HasOne("AbySalto.Junior.Models.OrderItem", null)
+                        .WithMany("Articles")
+                        .HasForeignKey("OrderItemId");
+                });
+
             modelBuilder.Entity("AbySalto.Junior.Models.Order", b =>
                 {
                     b.HasOne("AbySalto.Junior.Models.Currency", "Currency")
@@ -202,26 +215,23 @@ namespace AbySalto.Junior.Migrations
 
             modelBuilder.Entity("AbySalto.Junior.Models.OrderItem", b =>
                 {
-                    b.HasOne("AbySalto.Junior.Models.Article", "Article")
-                        .WithMany()
-                        .HasForeignKey("ArticleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("AbySalto.Junior.Models.Order", "Order")
-                        .WithMany("OrderItems")
+                        .WithMany("OrderItem")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Article");
 
                     b.Navigation("Order");
                 });
 
             modelBuilder.Entity("AbySalto.Junior.Models.Order", b =>
                 {
-                    b.Navigation("OrderItems");
+                    b.Navigation("OrderItem");
+                });
+
+            modelBuilder.Entity("AbySalto.Junior.Models.OrderItem", b =>
+                {
+                    b.Navigation("Articles");
                 });
 #pragma warning restore 612, 618
         }
