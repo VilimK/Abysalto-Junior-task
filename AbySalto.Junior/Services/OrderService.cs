@@ -17,9 +17,6 @@ namespace AbySalto.Junior.Services
 
         public async Task<Order> CreateOrder(CreateOrderDTO createOrderDto)
         {
-            if (!_context.Status.Any(s => s.Id == createOrderDto.StatusId))
-                throw new ArgumentException("Invalid status ID");
-
             if (!_context.PaymentType.Any(p => p.Id == createOrderDto.PaymentTypeId))
                 throw new ArgumentException("Invalid payment type ID");
 
