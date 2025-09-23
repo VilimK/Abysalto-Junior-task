@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace AbySalto.Junior.Models
 {
@@ -8,7 +9,8 @@ namespace AbySalto.Junior.Models
         public int Id { get; set; }
 
         public int OrderId { get; set; }
-        
+
+        [JsonIgnore]
         public Order Order { get; set; }
 
         [Range(1, int.MaxValue, ErrorMessage = "Quantity must be greater than 0.")]

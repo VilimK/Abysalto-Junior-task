@@ -34,13 +34,11 @@ namespace AbySalto.Junior.Controllers
 
         //Only pending and preparing orders
         [HttpGet("active")]
-        public async Task<ActionResult<IEnumerable<Order>>> GetActiveOrders()
+        public async Task<ActionResult<List<Order>>> GetActiveOrders()
         {
             var ordersPND = await _orderService.GetOrdersDependingOnStatusCode("PND");
             var ordersPRP = await _orderService.GetOrdersDependingOnStatusCode("PRP");
-            var orders = new List<Order>();
-            orders.AddRange(ordersPND);
-            orders.AddRange(ordersPRP);
+            var orders = ordersPND.Concat(ordersPRP).ToList();
             return Ok(orders);
         }
 
@@ -66,11 +64,11 @@ namespace AbySalto.Junior.Controllers
         }
 
         [HttpGet("{orderId}/amount")]
-        public ActionResult<decimal> GetOrderAmount(int orderId)
+        public async Task<ActionResult<decimal>> GetOrderAmount(int orderId)
         {
             try
             {
-                var amount = _orderService.GetOrderAmount(orderId);
+                var amount = await _orderService.GetOrderAmount(orderId);
                 return Ok(amount);
             }
             catch (ArgumentException ex)

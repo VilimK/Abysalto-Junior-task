@@ -3,6 +3,7 @@ using AbySalto.Junior.Infrastructure.Database;
 using AbySalto.Junior.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using System.Text.Json.Serialization;
 
 namespace AbySalto.Junior
 {
@@ -29,7 +30,11 @@ namespace AbySalto.Junior
 
             builder.Services.AddScoped<OrderService>();
             builder.Services.AddScoped<OrderItemService>();
-
+            builder.Services.AddControllers()
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+                });
             builder.Services.AddCors(options =>
             {
                 options.AddDefaultPolicy(policy =>
