@@ -41,6 +41,7 @@ namespace AbySalto.Junior.Services
                 .ThenInclude(oi => oi.Article)
                 .FirstOrDefault(o => o.Id == createOrderItemDTO.OrderId);
             _orderService.UpdateOrderAmount(order);
+            await _context.SaveChangesAsync();
             return newOrderItem;
         }
     }

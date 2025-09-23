@@ -99,6 +99,31 @@ namespace AbySalto.Junior.Services
             return orders; 
         }
 
+        public async Task<Order> UpdateOrderStatusAsync(int orderId)
+        {
+            var order = await _context.Order.FirstOrDefaultAsync(o => o.Id == orderId);
+            if (order == null)
+                throw new ArgumentException("Invalid order ID");
 
+            var status = await _context.Status.FirstOrDefaultAsync(s => s.Id == order.StatusId);
+            if (status == null)
+                throw new ArgumentException("Invalid status ID");
+            
+            Status newStatus = null;
+            if (status.Code == "PND")
+                newStatus = await _context.Status.FirstOrDefaultAsync(s => s.Code == "PRP");
+            else if (status.Code == "PRP")
+                newStatus = await _context.Status.FirstOrDefaultAsync(s => s.Code == "CMP");
+            else if (status.Code == "CMP")
+                throw new InvalidOperationException("Cannot change completed order");
+
+            if (newStatus == null)
+                throw new InvalidOperationException("Next status not found in database.");
+            
+            order.StatusId = newStatus.Id;
+            await _context.SaveChangesAsync();
+
+            return order;
+        }
     }
 }

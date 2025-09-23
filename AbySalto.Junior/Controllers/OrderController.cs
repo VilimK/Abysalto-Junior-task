@@ -50,5 +50,20 @@ namespace AbySalto.Junior.Controllers
             var orders = await _orderService.GetOrdersDependingOnStatusCode("CMP");
             return Ok(orders);
         }
+
+        [HttpPatch("{orderId}/status")]
+        public async Task<ActionResult<Order>> UpdateOrderStatus(int orderId)
+        {
+            try
+            {
+                var order = await _orderService.UpdateOrderStatusAsync(orderId);
+                return Ok(order);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+        }
+
     }
 }
