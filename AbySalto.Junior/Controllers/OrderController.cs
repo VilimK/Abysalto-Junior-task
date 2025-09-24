@@ -49,7 +49,7 @@ namespace AbySalto.Junior.Controllers
             return Ok(orders);
         }
 
-        [HttpPatch("{orderId}/status")]
+        [HttpPatch("{orderId}/statusupdate")]
         public async Task<ActionResult<Order>> UpdateOrderStatus(int orderId)
         {
             try

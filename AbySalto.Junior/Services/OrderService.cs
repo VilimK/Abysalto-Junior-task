@@ -77,11 +77,12 @@ namespace AbySalto.Junior.Services
             await _context.SaveChangesAsync();
         }
 
-        internal void UpdateOrderAmount(Order order)
+        internal async void UpdateOrderAmount(Order order)
         {
             if (order == null || order.OrderItems == null )
                 throw new ArgumentNullException("Order is null");
             order.Amount = order.OrderItems.Sum(o => o.Article.Price * o.Quantity);
+            await _context.SaveChangesAsync();
         }
 
         //Status Codes:
