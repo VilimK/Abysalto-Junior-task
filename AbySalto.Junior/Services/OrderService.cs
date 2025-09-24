@@ -113,7 +113,7 @@ namespace AbySalto.Junior.Services
             else if (status.Code == "PRP")
                 newStatus = await _context.Status.FirstOrDefaultAsync(s => s.Code == "CMP");
             else if (status.Code == "CMP")
-                throw new InvalidOperationException("Cannot change completed order");
+                throw new InvalidOperationException("Cannot change status of completed order");
 
             if (newStatus == null)
                 throw new InvalidOperationException("Next status not found in database.");
