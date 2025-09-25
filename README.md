@@ -51,17 +51,13 @@ orderId (int) – ID narudžbe koju treba ažurirati
 Vraća: Order (ažurirana narudžba)
 Opis: Ažurira status određene narudžbe (npr. iz Pending → Preparing → Completed).
 
-#### GET /orders/{orderId}/amount
-Parametri (route):
-orderId (int) – ID narudžbe
-Vraća: decimal (ukupni iznos narudžbe)
-Opis: Vraća ukupan iznos određene narudžbe.
+- #### GET /orders/{orderId}/amount 
+ - **Parametri (route):**  orderId (int) – ID narudžbe  
+ - **Vraća:** decimal (ukupni iznos narudžbe)
+ - **Opis:** Vraća ukupan iznos određene narudžbe.
 
 #### GET /orders/sorted-by-amount
-
 Parametri: nema
-
 Vraća: List<Order>
-
 Opis: Dohvaća sve narudžbe, sortirane prema ukupnom iznosu od najmanjeg do najvećeg.
 
