@@ -17,8 +17,8 @@ Swagger UI: http://localhost:5000/swagger
 ## Dokumentacija
 ## 📖 Orders API Dokumentacija
 
-### **POST `/orders`**
-- **Parametri (body):**
+#### **POST `/orders`**
+- Parametri (body):
   ```json
   {
     "buyerName": "Ivan Ivković",
@@ -33,42 +33,32 @@ Swagger UI: http://localhost:5000/swagger
     ]
   }
 Vraća: Order (novokreirana narudžba)
-
 Opis: Kreira novu narudžbu s artiklima, računa ukupni iznos i sprema je u bazu.
 
-GET /orders/active
+#### GET /orders/active
 Parametri: nema
-
 Vraća: List<Order>
-
 Opis: Dohvaća sve aktivne narudžbe (statusi PND i PRP).
 
-GET /orders/completed
+#### GET /orders/completed
 Parametri: nema
-
 Vraća: List<Order>
-
 Opis: Dohvaća sve dovršene narudžbe (status CMP).
 
-PATCH /orders/{orderId}/statusupdate
+#### PATCH /orders/{orderId}/statusupdate
 Parametri (route):
-
 orderId (int) – ID narudžbe koju treba ažurirati
-
 Vraća: Order (ažurirana narudžba)
-
 Opis: Ažurira status određene narudžbe (npr. iz Pending → Preparing → Completed).
 
-GET /orders/{orderId}/amount
+#### GET /orders/{orderId}/amount
 Parametri (route):
-
 orderId (int) – ID narudžbe
-
 Vraća: decimal (ukupni iznos narudžbe)
-
 Opis: Vraća ukupan iznos određene narudžbe.
 
-GET /orders/sorted-by-amount
+#### GET /orders/sorted-by-amount
+
 Parametri: nema
 
 Vraća: List<Order>
